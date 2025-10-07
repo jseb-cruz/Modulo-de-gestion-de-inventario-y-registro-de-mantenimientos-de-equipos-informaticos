@@ -1,0 +1,21 @@
+<table>
+    <thead>
+        <tr>
+            <th>Equipment ID</th>
+            <th>Technician</th>
+            <th>Type</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(item of data; track item.id) {
+        <tr>
+            <td>{{ item.equipmentId }}</td>
+            <td>{{ item.technician }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.status }}</td>
+
+        </tr>
+        }
+    </tbody>
+</table>

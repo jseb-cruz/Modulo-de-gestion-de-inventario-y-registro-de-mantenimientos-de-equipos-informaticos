@@ -1,0 +1,11 @@
+<section class="container">
+    <h2>Maintenance Inventory</h2>
+    <button (click)="reload()">Reload</button>
+    @if (loading()) {
+    <p>Loading....</p>
+    }
+    @if (error()) {
+    <p>{{ error() }}</p>
+    }
+    <app-maintenance-table *ngIf="!loading() && !error()" [data]="items()" />
+</section>

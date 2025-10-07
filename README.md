@@ -1,59 +1,116 @@
-# IntroAngular
+# Proyecto Integrador
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
+## Nombre del Proyecto
 
-## Development server
+Modulo de gestion de inventario y registro de 
+mantenimientos de equipos informaticos.
 
-To start a local development server, run:
+## Descripcion del Proyecto
 
-```bash
-ng serve
-```
+Diseñar e implementar un modulo de gestion del inventario y registro para mantenimientos para equipos informaticos, que permite llevar un control eficiente del estado, ubicacion y mantenimiento preventivo y correctivo de los dispositivos, mejorando la trasabilidad y disponibilidad y toma de decisiones en la administracion de recursos tecnologicos.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Pasos iniciales
 
-## Code scaffolding
+- **Instalación de angular:**
+  
+  ```bash
+  npm install -g @angular/cli
+  ```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Creación de proyecto:**
+  
+  ```bash
+  ng new frontend
+  ```
 
-```bash
-ng generate component component-name
-```
+- **Ubicación en directorio:**
+  
+  ```bash
+  cd frontend
+  ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- **Levantamiento de proyecto:**
 
-```bash
-ng generate --help
-```
+  ```bash
+  ng serve -o
+  ```
 
-## Building
+  ## Diagrama de clases
+  ```mermaid
+  classDiagram
+    class Maintenance {
+        +id: string
+        +equipmentId: string
+        +type: string
+        +scheduleAt: Date
+        +performedAt: Date
+        +technician: string
+        +notes?: string | null
+        +cost?: number
+        +status: string
+        +isCompleted(): boolean
+    }
+    class MaintenanceStatus{
+        <<enumeration>>
+        Active
+        Inactive
+        InProgress
+        Finished
+    }
 
-To build the project run:
+     class MaintenanceType{
+        <<enumeration>>
+        Inspection
+        Preventive
+        Corrective
+        Predictive
+        Proactive
+        Reactive
+        scheduled
+        Automated
 
-```bash
-ng build
-```
+    }
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+    Maintenance --> MaintenanceStatus: "Define estado"
+    Maintenance --> MaintenanceType: "Define Tipo"
 
-## Running unit tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+    
+    class Equipment {
+        +id: string
+        +assetTag: string
+        +serialNumber: string
+        +model: string
+        +type: EquipmentType
+        +status: EquipmentStatus
+        +locationId: string
+        +purchaseDate: Date
+        +warrantyEnd: Date
+        +metada: Map<string, any>
+        +isActive(): boolean
+    }
 
-```bash
-ng test
-```
+    class EquipmentStatus{
+        <<enumeration>>
+        Available
+        InUse
+        InRepair
+        Retired
+    }
+    
 
-## Running end-to-end tests
+    class EquipmentType{
+        <<enumeration>>
+        Personal Computer
+        Phone
+        Console
+        All in One
+        Peripherals
+        Electrodomestics
+    }
+    
+    Equipment --> EquipmentType : "Define tipo"
+    Equipment --> EquipmentStatus: "Define status"
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+    
+# DTO, Data transfer Object
