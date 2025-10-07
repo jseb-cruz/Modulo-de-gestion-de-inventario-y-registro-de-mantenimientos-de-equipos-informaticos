@@ -8,10 +8,11 @@ import { StatusLabelPipe } from '../../../../shared/pipes/status-label-pipe';
 
 @Component({
   selector: 'app-equipment-list',
+  standalone: true,
   imports: [CommonModule, EquipmentTable, RouterLink, TypeLabelPipe,
     StatusLabelPipe],
   templateUrl: './equipment-list.page.html',
-  styleUrl: './equipment-list.page.css'
+  styleUrls: ['./equipment-list.page.css']
 })
 
 export class EquipmentListPage {

@@ -1,0 +1,85 @@
+<section class="container">
+  <h2>Registrar/Editar Mantenimiento</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid">
+      <label>
+        Equipo (equipmentId)*
+        <input formControlName="equipmentId" placeholder="ID del equipo" />
+        @if(form.controls.equipmentId.invalid && form.controls.equipmentId.touched){
+          <span class="error">Requerido</span>
+        }
+      </label>
+
+      <label>
+        Tipo*
+        <select formControlName="type">
+          <option value="Inspection">Inspección</option>
+          <option value="Preventive">Preventivo</option>
+          <option value="Corrective">Correctivo</option>
+          <option value="Predictive">Predictivo</option>
+          <option value="Proactive">Proactivo</option>
+          <option value="Reactive">Reactivo</option>
+          <option value="Scheduled">Programado</option>
+          <option value="Automated">Automatizado</option>
+        </select>
+      </label>
+
+      <label>
+        Programado para*
+        <input type="datetime-local" formControlName="scheduledAt" />
+        @if(form.controls.scheduledAt.invalid && form.controls.scheduledAt.touched){
+          <span class="error">Requerido</span>
+        }
+      </label>
+
+      <label>
+        Ejecutado el (opcional)
+        <input type="datetime-local" formControlName="performedAt" />
+      </label>
+
+      <label>
+        Técnico*
+        <input type="text" formControlName="technician" placeholder="Nombre del técnico" />
+        @if(form.controls.technician.invalid && form.controls.technician.touched){
+          <span class="error">Requerido</span>
+        }
+      </label>
+
+      <label>
+        Estado*
+        <select formControlName="status">
+          <option value="Scheduled">Programado</option>
+          <option value="InProgress">En progreso</option>
+          <option value="Done">Completado</option>
+          <option value="Active">Activo</option>
+          <option value="Inactive">Inactivo</option>
+        </select>
+      </label>
+
+      <label>
+        Costo (opcional)
+        <input type="number" formControlName="cost" min="0" step="0.01" />
+        @if(form.controls.cost.touched && form.controls.cost.hasError('min')){
+          <span class="error">No puede ser negativo</span>
+        }
+      </label>
+
+      <label class="span-2">
+        Notas (opcional)
+        <textarea formControlName="notes" rows="3" placeholder="Observaciones"></textarea>
+      </label>
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="form.invalid || submitting()">Guardar</button>
+      <button type="reset">Limpiar</button>
+    </div>
+
+    @if(error()){
+      <p class="error">{{ error() }}</p>
+    }
+    @if(success()){
+      <p class="success">Guardado correctamente (simulado)</p>
+    }
+  </form>
+</section>

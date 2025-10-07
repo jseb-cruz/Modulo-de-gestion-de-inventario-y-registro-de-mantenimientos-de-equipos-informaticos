@@ -1,11 +1,48 @@
 <section class="container">
-    <h2>Maintenance Inventory</h2>
-    <button (click)="reload()">Reload</button>
-    @if (loading()) {
-    <p>Loading....</p>
-    }
-    @if (error()) {
-    <p>{{ error() }}</p>
-    }
-    <app-maintenance-table *ngIf="!loading() && !error()" [data]="items()" />
+  <header class="toolbar">
+    <h2>Equipment Inventory</h2>
+    <a routerLink="/equipment/new">+ Nuevo</a>
+  </header>
+  <div class="filters">
+    <input placeholder="Buscar por Asset/Serial/Modelo" (input)="onQuery($event)" type="text">
+    <select name="selectType" id="selectType" (change)="onType($event)">
+      <option value="All">Tipo (Todos)</option>
+      @for(type of types; track type) {
+      <option [value]="type">{{ type | typeLabel }}</option>
+      }
+    </select>
+    <select name="selectStatus" id="selectStatus" (change)="onStatus($event)">
+      <option value="All">Estado (Todos)</option>
+      @for(status of statuses; track status) {
+      <option [value]="status">{{ status | statusLabel }}</option>
+      }
+    </select>
+    <label>
+      Tamaño página
+      <select name="selectPageSize" id="selectPageSize" (change)="onPageSize($event)">
+        <option [value]="1">1</option>
+        <option [value]="5">5</option>
+        <option [value]="10" selected>10</option>
+        <option [value]="20">20</option>
+      </select>
+    </label>
+  </div>
+  <button (click)="reload()">Reload</button>
+  @if (loading()) {
+  <p>Loading....</p>
+  }
+  @if (error()) {
+  <p>{{ error() }}</p>
+  }
+  @if(!loading() && !error()) {
+  <app-maintenance-table [data]="paged()" />
+  }
+  @if(total() > pageSize()) {
+  <div class="pagination">
+    <button (click)="previous()" [disabled]="page() === 1">Anterior</button>
+    <span>Página {{ page() }} de {{ totalPages() }}</span>
+    <button (click)="next()" [disabled]="page() >=
+totalPages()">Siguiente</button>
+  </div>
+  }
 </section>

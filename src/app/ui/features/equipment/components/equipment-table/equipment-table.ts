@@ -6,9 +6,10 @@ import { TypeLabelPipe } from '../../../../shared/pipes/type-label-pipe';
 
 @Component({
   selector: 'app-equipment-table',
+  standalone: true,
   imports: [CommonModule, TypeLabelPipe, StatusLabelPipe],
   templateUrl: './equipment-table.html',
-  styleUrl: './equipment-table.css'
+  styleUrls: ['./equipment-table.css']
 })
 export class EquipmentTable {
   @Input() data: Equipment[] = [];
