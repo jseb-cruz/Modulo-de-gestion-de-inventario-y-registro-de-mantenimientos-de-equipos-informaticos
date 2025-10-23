@@ -1,10 +1,10 @@
 ﻿import { computed, inject, Injectable, signal, effect } from '@angular/core';
-import { LoadEquipmentListUseCase } from '../../../../application/use-cases/load-equipment-list.use-case';
+import { LoadEquipmentListUseCase } from '../../../../application/use-cases/equipment/load-equipment-list.use-case';
 import { Equipment } from '../../../../domain/models/equipment.model';
-import { CreateEquipmentUseCase } from '../../../../application/use-cases/create-equipment.use-case';
-import { FindEquipmentByIdUseCase } from '../../../../application/use-cases/find-equipment-by-id.use-case';
-import { RemoveEquipmentUseCase } from '../../../../application/use-cases/remove-equipment.use-case';
-import { UpdateEquipmentUseCase } from '../../../../application/use-cases/update-equipment.use-case';
+import { CreateEquipmentUseCase } from '../../../../application/use-cases/equipment/create-equipment.use-case';
+import { FindEquipmentByIdUseCase } from '../../../../application/use-cases/equipment/find-equipment-by-id.use-case';
+import { RemoveEquipmentUseCase } from '../../../../application/use-cases/equipment/remove-equipment.use-case';
+import { UpdateEquipmentUseCase } from '../../../../application/use-cases/equipment/update-equipment.use-case';
 import { EquipmentDTO } from '../../../../shared/contracts/equipment.contract';
 
 

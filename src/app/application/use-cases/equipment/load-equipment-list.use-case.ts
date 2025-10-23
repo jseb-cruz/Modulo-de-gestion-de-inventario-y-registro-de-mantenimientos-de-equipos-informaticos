@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { EquipmentRepository } from '../../domain/repositories/equipment.repository';
-import { Equipment } from '../../domain/models/equipment.model';
+import { EquipmentRepository } from '../../../domain/repositories/equipment.repository';
+import { Equipment } from '../../../domain/models/equipment.model';
 
 @Injectable({ providedIn: 'root' })
 export class LoadEquipmentListUseCase {

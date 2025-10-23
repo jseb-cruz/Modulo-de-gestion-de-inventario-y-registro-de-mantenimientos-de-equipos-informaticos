@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { MaintenanceRepository } from '../../domain/repositories/maintenance.repository';
+import { MaintenanceRepository } from '../../../domain/repositories/maintenance.repository';
 
 @Injectable({
   providedIn: 'root'

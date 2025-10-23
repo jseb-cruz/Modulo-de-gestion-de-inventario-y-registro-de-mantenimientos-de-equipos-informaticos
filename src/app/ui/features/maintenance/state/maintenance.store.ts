@@ -1,10 +1,10 @@
 import { computed, inject, Injectable, signal, effect } from '@angular/core';
-import { LoadMaintenanceListUseCase } from '../../../../application/use-cases/load-maintenance-list.use-case';
+import { LoadMaintenanceListUseCase } from '../../../../application/use-cases/maintenance/load-maintenance-list.use-case';
 import { Maintenance } from '../../../../domain/models/maintenance.model';
-import { CreateMaintenanceUseCase } from '../../../../application/use-cases/create-maintenance.use-case';
-import { FindMaintenanceByIdUseCase } from '../../../../application/use-cases/find-maintenance-by-id.use-case';
-import { RemoveMaintenanceUseCase } from '../../../../application/use-cases/remove-maintenance.use-case';
-import { UpdateMaintenanceUseCase } from '../../../../application/use-cases/update-maintenance.use-case';
+import { CreateMaintenanceUseCase } from '../../../../application/use-cases/maintenance/create-maintenance.use-case';
+import { FindMaintenanceByIdUseCase } from '../../../../application/use-cases/maintenance/find-maintenance-by-id.use-case';
+import { RemoveMaintenanceUseCase } from '../../../../application/use-cases/maintenance/remove-maintenance.use-case';
+import { UpdateMaintenanceUseCase } from '../../../../application/use-cases/maintenance/update-maintenance.use-case';
 import { MaintenanceDTO } from '../../../../shared/contracts/maintenance.contract';
 
 type Status = 'Active' | 'Inactive' | 'InProgress' | 'Done' | 'Scheduled' | 'All';

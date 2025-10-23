@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Maintenance } from '../../domain/models/maintenance.model';
-import { MaintenanceRepository } from '../../domain/repositories/maintenance.repository';
-import { MaintenanceDTO } from '../../shared/contracts/maintenance.contract';
+import { Maintenance } from '../../../domain/models/maintenance.model';
+import { MaintenanceRepository } from '../../../domain/repositories/maintenance.repository';
+import { MaintenanceDTO } from '../../../shared/contracts/maintenance.contract';
 @Injectable({
   providedIn: 'root'
 })
