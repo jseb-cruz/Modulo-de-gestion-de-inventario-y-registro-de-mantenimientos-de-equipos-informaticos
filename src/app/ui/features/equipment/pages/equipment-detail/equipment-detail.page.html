@@ -1,1 +1,24 @@
-<p>equipment-detail works!</p>
+@if (loading() && !equipment()) {
+<p>Cargando equipo</p>
+}
+@if (equipment()) {
+<section>
+    <h2>Detalles del equipo</h2>
+    <ul>
+        <li><b>Asset Tag:</b> {{ equipment()!.assetTag }}</li>
+        <li><b>Serial:</b> {{ equipment()!.serialNumber }}</li>
+        <li><b>Modelo:</b> {{ equipment()!.model }}</li>
+        <li><b>Tipo:</b> {{ equipment()!.type }}</li>
+        <li><b>Estado:</b> {{ equipment()!.status }}</li>
+        <li><b>Ubicación:</b> {{ equipment()!.locationId }}</li>
+    </ul>
+    <div>
+        <button (click)="goEdit()">Editar</button>
+        <button (click)="delete()">Eliminar</button>
+        <a routerLink="/equipment">Volver</a>
+    </div>
+</section>
+}
+@if (!loading() && !equipment()) {
+<p>No se encontró el equipo. <a routerLink="/equipment">Volver</a></p>
+}

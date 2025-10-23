@@ -1,6 +1,11 @@
 ﻿import { computed, inject, Injectable, signal, effect } from '@angular/core';
 import { LoadEquipmentListUseCase } from '../../../../application/use-cases/load-equipment-list.use-case';
 import { Equipment } from '../../../../domain/models/equipment.model';
+import { CreateEquipmentUseCase } from '../../../../application/use-cases/create-equipment.use-case';
+import { FindEquipmentByIdUseCase } from '../../../../application/use-cases/find-equipment-by-id.use-case';
+import { RemoveEquipmentUseCase } from '../../../../application/use-cases/remove-equipment.use-case';
+import { UpdateEquipmentUseCase } from '../../../../application/use-cases/update-equipment.use-case';
+import { EquipmentDTO } from '../../../../shared/contracts/equipment.contract';
 
 
 type Status = 'Available' | 'InUse' | 'InRepair' | 'Retired' | 'All';
@@ -86,7 +91,65 @@ export class EquipmentStore {
         this.pageSize.set(n);
         this.page.set(1);
     }
+
+    private readonly findEquipmentById = inject(FindEquipmentByIdUseCase);
+    private readonly createEquipment = inject(CreateEquipmentUseCase);
+    private readonly updateEquipment = inject(UpdateEquipmentUseCase);
+    private readonly removeEquipment = inject(RemoveEquipmentUseCase);
+
+    async findById(id: string) {
+        const cached = this.items().find(e => e.id === id);
+        if (cached) return cached;
+        this.loading.set(true);
+        this.error.set(null);
+        try {
+            const found = await this.findEquipmentById.execute(id);
+            if (found) {
+                const exists = this.items().some(e => e.id === found.id);
+                this.items.set(
+                    exists
+                        ? this.items().map(e => e.id === found.id ? found : e)
+                        : [found, ...this.items()]
+                );
+            }
+            return found ?? null;
+        } catch (err: any) {
+            this.error.set(err?.message ?? 'No fue posible obtener el equipo');
+            return null;
+        } finally {
+            this.loading.set(false);
+        }
+    }
+    async create(input: EquipmentDTO) {
+        this.loading.set(true);
+        try {
+            const created = await this.createEquipment.execute(input);
+            this.items.set([created, ...this.items()]);
+        } finally {
+            this.loading.set(false);
+        }
+    }
+    async update(id: string, patch: Partial<EquipmentDTO>) {
+        this.loading.set(true);
+        try {
+            const updated = await this.updateEquipment.execute(id, patch);
+            this.items.set(this.items().map(e => e.id === id ? updated : e));
+        } finally {
+            this.loading.set(false);
+        }
+    }
+    async remove(id: string) {
+        this.loading.set(true);
+        try {
+            await this.removeEquipment.execute(id);
+            this.items.set(this.items().filter(e => e.id !== id));
+        } finally {
+            this.loading.set(false);
+        }
+    }
 }
+
+
 
 
 

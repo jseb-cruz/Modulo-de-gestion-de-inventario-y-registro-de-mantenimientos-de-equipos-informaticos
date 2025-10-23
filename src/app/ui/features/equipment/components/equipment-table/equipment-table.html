@@ -18,6 +18,7 @@
             <td>{{ item.type | typeLabel }}</td>
             <td>{{ item.status | statusLabel }}</td>
             <td>{{ item.locationId }}</td>
+            <td><a [routerLink]="['/equipment', item.id]">Ver más</a></td>
         </tr>
         }
     </tbody>

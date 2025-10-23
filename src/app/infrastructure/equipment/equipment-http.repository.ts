@@ -19,4 +19,19 @@ export class EquipmentHttpRepository implements EquipmentRepository {
     const dto = await firstValueFrom(this.http.get<EquipmentDTO>(`equipment/${id}`));
     return dto ? Equipment.create(dto) : null;
   }
+  async create(input: EquipmentDTO): Promise<Equipment> {
+    const dto = await this.http.post<EquipmentDTO>('equipment', input
+    ).toPromise();
+    return Equipment.create(dto!);
+  }
+  async update(id: string, patch: Partial<EquipmentDTO>): Promise<Equipment> {
+    const dto = await this.http.patch<EquipmentDTO>(`equipment/${id}`, patch
+    ).toPromise();
+    return Equipment.create(dto!);
+  }
+  async remove(id: string): Promise<void> {
+    await this.http.delete<void>(`equipment/${id}`).toPromise();
+  }
 }
+
+

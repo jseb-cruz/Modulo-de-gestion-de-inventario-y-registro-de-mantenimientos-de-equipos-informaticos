@@ -1,5 +1,5 @@
 <section class="container">
-    <h2>Registrar/Editar Equipo</h2>
+    <h2>{{ isEdit ? 'Editar Equipo' : 'Nuevo Equipo' }}</h2>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="grid">
             <label>
@@ -53,7 +53,8 @@
         </div>
         <div class="actions">
             <button type="submit" [disabled]="form.invalid ||
-submitting()">Guardar</button>
+submitting()"> {{ isEdit ? 'Guardar Cambios' : 'Registrar' }} </button>
+            <a routerLink="/equipment">Cancelar</a>
         </div>
         @if(error()){
         <p>{{ error() }}</p>

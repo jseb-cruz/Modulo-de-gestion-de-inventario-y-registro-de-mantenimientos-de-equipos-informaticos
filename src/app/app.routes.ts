@@ -25,35 +25,41 @@ export const routes: Routes = [
             },
             {
                 path: 'equipment/:id',
-                canActivate: [equipmentExistsGuard],
                 loadComponent: () => import(
                     './ui/features/equipment/pages/equipment-detail/equipment-detail.page').then(
                         m => m.EquipmentDetailPage)
             },
             {
-                path: 'maintenance',
-                loadComponent: () => import(
-                    './ui/features/maintenance/pages/maintenance-list/maintenance-list.page').then(m =>
-                        m.MaintenanceListPage),
-                resolve: { preload: maintenanceListResolver }
+                path: 'equipment/:id/edit',
+                canActivate: [equipmentExistsGuard],
+                loadComponent: () => import('./ui/features/equipment/pages/equipment-form/equipment-form.page').then(m => m.EquipmentFormPage),
             },
-            {
-                path: 'maintenance/new',
-                loadComponent: () => import(
-                    './ui/features/maintenance/pages/maintenance-form/maintenance-form.page').then(m =>
-                        m.MaintenanceFormPage)
-            },
-            {
-                path: 'maintenance/:id',
-                canActivate: [maintenanceExistsGuard],
-                loadComponent: () => import(
-                    './ui/features/maintenance/pages/maintenance-detail/maintenance-detail.page').then(
-                        m => m.MaintenanceDetailPage)
-            },
-            { path: '', pathMatch: 'full', redirectTo: 'equipment' },
-            { path: '**', redirectTo: 'equipment' },
+            { path: '', redirectTo: 'equipment', pathMatch: 'full' },
         ],
     },
+    {
+        path: 'maintenance',
+        loadComponent: () => import(
+            './ui/features/maintenance/pages/maintenance-list/maintenance-list.page').then(m =>
+                m.MaintenanceListPage),
+        resolve: { preload: maintenanceListResolver }
+    },
+    {
+        path: 'maintenance/new',
+        loadComponent: () => import(
+            './ui/features/maintenance/pages/maintenance-form/maintenance-form.page').then(m =>
+                m.MaintenanceFormPage)
+    },
+    {
+        path: 'maintenance/:id',
+        canActivate: [maintenanceExistsGuard],
+        loadComponent: () => import(
+            './ui/features/maintenance/pages/maintenance-detail/maintenance-detail.page').then(
+                m => m.MaintenanceDetailPage)
+    },
+    { path: '', pathMatch: 'full', redirectTo: 'equipment' },
+    { path: '**', redirectTo: 'equipment' },
 ];
+
 
 
