@@ -75,7 +75,7 @@ export class EquipmentFormPage {
       this.form.markAsPristine();
     } catch (e: any) {
       this.error.set(e?.message ?? 'Error al guardar');
-        } finally {
+    } finally {
       this.submitting.set(false);
     }
   }
