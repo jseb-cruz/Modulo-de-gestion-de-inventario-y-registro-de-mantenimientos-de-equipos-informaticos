@@ -52,10 +52,14 @@ export const routes: Routes = [
     },
     {
         path: 'maintenance/:id',
-        canActivate: [maintenanceExistsGuard],
         loadComponent: () => import(
             './ui/features/maintenance/pages/maintenance-detail/maintenance-detail.page').then(
                 m => m.MaintenanceDetailPage)
+    },
+    {
+        path: 'maintenance/:id/edit',
+        canActivate: [maintenanceExistsGuard],
+        loadComponent: () => import('./ui/features/maintenance/pages/maintenance-form/maintenance-form.page').then(m => m.MaintenanceFormPage),
     },
     { path: '', pathMatch: 'full', redirectTo: 'equipment' },
     { path: '**', redirectTo: 'equipment' },

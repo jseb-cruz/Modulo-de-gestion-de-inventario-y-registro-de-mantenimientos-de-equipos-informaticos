@@ -20,4 +20,19 @@ export class MaintenanceHttpRepository implements MaintenanceRepository {
 id }` ) );
  return dto ? Maintenance.create( dto ) : null;
  }
+ async create ( input: MaintenanceDTO ): Promise<Maintenance> {
+ const dto = await this.http.post<MaintenanceDTO>( 'Maintenance', input
+).toPromise();
+ return Maintenance.create( dto! );
+ }
+ async update ( id: string, patch: Partial<MaintenanceDTO> ): Promise<Maintenance> {
+ const dto = await this.http.patch<MaintenanceDTO>( `Maintenance/${ id }`, patch
+).toPromise();
+ return Maintenance.create( dto! );
+ }
+ async remove ( id: string ): Promise<void> {
+ await this.http.delete<void>( `Maintenance/${ id }` ).toPromise();
+ }
 }
+
+

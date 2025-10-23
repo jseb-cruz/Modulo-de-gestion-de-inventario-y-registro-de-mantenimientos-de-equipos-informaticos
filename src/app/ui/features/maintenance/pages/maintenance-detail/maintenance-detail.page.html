@@ -1,1 +1,27 @@
-<p>maintenance-detail works!</p>
+@if (loading() && !maintenance()) {
+<p>Cargando mantenimiento</p>
+}
+@if (maintenance()) {
+<section>
+    <h2>Detalles del mantenimiento</h2>
+    <ul>
+        <li><b>ID:</b> {{ maintenance()!.id }}</li>
+        <li><b>Equipo:</b> {{ maintenance()!.equipmentId }}</li>
+        <li><b>Tipo:</b> {{ maintenance()!.type }}</li>
+        <li><b>Técnico:</b> {{ maintenance()!.technician }}</li>
+        <li><b>Estado:</b> {{ maintenance()!.status }}</li>
+        <li><b>Programado:</b> {{ maintenance()!.scheduledAt }}</li>
+        <li><b>Realizado:</b> {{ maintenance()!.performedAt ? maintenance()!.performedAt : '—' }}</li>
+        <li><b>Costo:</b> {{ maintenance()!.cost != null ? maintenance()!.cost : '—' }}</li>
+        <li><b>Notas:</b> {{ maintenance()!.notes ? maintenance()!.notes : '—' }}</li>
+    </ul>
+    <div>
+        <button (click)="goEdit()">Editar</button>
+        <button (click)="delete()">Eliminar</button>
+        <a routerLink="/maintenance">Volver</a>
+    </div>
+</section>
+}
+@if (!loading() && !maintenance()) {
+<p>No se encontró el mantenimiento. <a routerLink="/maintenance">Volver</a></p>
+}

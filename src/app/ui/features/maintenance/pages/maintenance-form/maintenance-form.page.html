@@ -1,9 +1,9 @@
 <section class="container">
-  <h2>Registrar/Editar Mantenimiento</h2>
+  <h2>{{ isEdit ? 'Editar Mantenimiento' : 'Nuevo Mantenimiento' }}</h2>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="grid">
       <label>
-        Equipo (equipmentId)*
+        Mantenimiento (equipmentId)*
         <input formControlName="equipmentId" placeholder="ID del equipo" />
         @if(form.controls.equipmentId.invalid && form.controls.equipmentId.touched){
           <span class="error">Requerido</span>
@@ -71,8 +71,9 @@
     </div>
 
     <div class="actions">
-      <button type="submit" [disabled]="form.invalid || submitting()">Guardar</button>
+      <button type="submit" [disabled]="form.invalid || submitting()">{{ isEdit ? 'Guardar Cambios' : 'Registrar' }}</button>
       <button type="reset">Limpiar</button>
+      <a routerLink="/maintenance">Cancelar</a>
     </div>
 
     @if(error()){

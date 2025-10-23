@@ -3,11 +3,14 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Maintenance } from '../../../../../domain/models/maintenance.model';
 import { MaintenanceDTOInput, MaintenanceDTOSchema } from '../../schemas/maintenance.zod';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MaintenanceStore } from '../../state/maintenance.store';
+import { StatusLabelPipe } from '../../../../shared/pipes/status-label-pipe';
 
 @Component({
   selector: 'app-maintenance-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './maintenance-form.page.html',
   styleUrls: ['./maintenance-form.page.css']
 })
@@ -33,6 +36,46 @@ export class MaintenanceFormPage {
     notes: this.fb.control<string | null>(null),
   });
 
+  private store = inject(MaintenanceStore);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  isEdit = false;
+  id = '';
+
+  ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id') ?? '';
+    if (this.id) {
+      this.isEdit = true;
+      const cached = this.store.items().find(m => m.id === this.id);
+      const apply = (m: Maintenance) => {
+        this.form.patchValue({
+          id: m.id,
+          equipmentId: m.equipmentId,
+          type: m.type as any,
+          scheduledAt: this.toDateInput(m.scheduledAt),
+          performedAt: m.performedAt ? this.toDateInput(m.performedAt) : null,
+          technician: m.technician,
+          status: m.status as any,
+          cost: m.cost ?? null,
+          notes: m.notes ?? null,
+        });
+      };
+      if (cached) {
+        apply(cached);
+      } else {
+        this.store.findById(this.id).then(found => { if (found) apply(found); });
+      }
+    }
+  }
+
+  private toDateInput(d: Date): string {                        //metodo que faltaba
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const year = d.getFullYear();
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    return `${year}-${month}-${day}`;
+  }
+
   async onSubmit() {
     this.error.set(null);
     this.success.set(false);
@@ -46,12 +89,28 @@ export class MaintenanceFormPage {
         performedAt: !raw.performedAt ? undefined : raw.performedAt,
       } as any;
       const parsed: MaintenanceDTOInput = MaintenanceDTOSchema.parse(toValidate);
-      const entity = Maintenance.create(parsed as any);
+      const dto = {
+        id: parsed.id,
+        equipmentId: parsed.equipmentId,
+        type: parsed.type,
+        scheduledAt: new Date(parsed.scheduledAt as any),
+        performedAt: parsed.performedAt ? new Date(parsed.performedAt as any) : undefined,
+        technician: parsed.technician,
+        status: parsed.status,
+        cost: parsed.cost,
+        notes: parsed.notes,
+      } as const;
 
-      await new Promise(r => setTimeout(r, 500));
-      console.log('Entidad lista para persistir:', entity);
+      if (this.isEdit) {
+        await this.store.update(this.id, dto as any);
+        alert('Mantenimiento actualizado');
+      } else {
+        await this.store.create(dto as any);
+        alert('Mantenimiento registrado');
+      }
       this.success.set(true);
       this.form.markAsPristine();
+      this.router.navigate(['/maintenance']);
     } catch (e: any) {
       this.error.set(e?.message ?? 'Error al guardar');
     } finally {
@@ -59,4 +118,3 @@ export class MaintenanceFormPage {
     }
   }
 }
-

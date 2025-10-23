@@ -5,6 +5,7 @@
             <th>Technician</th>
             <th>Type</th>
             <th>Status</th>
+            <th>Detalles</th>
         </tr>
     </thead>
     <tbody>
@@ -14,6 +15,7 @@
             <td>{{ item.technician }}</td>
             <td>{{ item.type | typeLabel:'maintenance' }}</td>
             <td>{{ item.status | statusLabel:'maintenance' }}</td>
+            <td><a [routerLink]="['/maintenance', item.id]">Ver más</a></td>
 
         </tr>
         }

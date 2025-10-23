@@ -54,6 +54,7 @@
         <div class="actions">
             <button type="submit" [disabled]="form.invalid ||
 submitting()"> {{ isEdit ? 'Guardar Cambios' : 'Registrar' }} </button>
+            <button type="reset">Limpiar</button>
             <a routerLink="/equipment">Cancelar</a>
         </div>
         @if(error()){

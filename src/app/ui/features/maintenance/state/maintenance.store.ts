@@ -1,6 +1,11 @@
 import { computed, inject, Injectable, signal, effect } from '@angular/core';
 import { LoadMaintenanceListUseCase } from '../../../../application/use-cases/load-maintenance-list.use-case';
 import { Maintenance } from '../../../../domain/models/maintenance.model';
+import { CreateMaintenanceUseCase } from '../../../../application/use-cases/create-maintenance.use-case';
+import { FindMaintenanceByIdUseCase } from '../../../../application/use-cases/find-maintenance-by-id.use-case';
+import { RemoveMaintenanceUseCase } from '../../../../application/use-cases/remove-maintenance.use-case';
+import { UpdateMaintenanceUseCase } from '../../../../application/use-cases/update-maintenance.use-case';
+import { MaintenanceDTO } from '../../../../shared/contracts/maintenance.contract';
 
 type Status = 'Active' | 'Inactive' | 'InProgress' | 'Done' | 'Scheduled' | 'All';
 type Type =
@@ -92,4 +97,62 @@ export class MaintenanceStore {
         this.pageSize.set(n);
         this.page.set(1);
     }
+
+    private readonly findMaintenanceById = inject(FindMaintenanceByIdUseCase);
+    private readonly createMaintenance = inject(CreateMaintenanceUseCase);
+    private readonly updateMaintenance = inject(UpdateMaintenanceUseCase);
+    private readonly removeMaintenance = inject(RemoveMaintenanceUseCase);
+
+    async findById(id: string) {
+        const cached = this.items().find(e => e.id === id);
+        if (cached) return cached;
+        this.loading.set(true);
+        this.error.set(null);
+        try {
+            const found = await this.findMaintenanceById.execute(id);
+            if (found) {
+                const exists = this.items().some(e => e.id === found.id);
+                this.items.set(
+                    exists
+                        ? this.items().map(e => e.id === found.id ? found : e)
+                        : [found, ...this.items()]
+                );
+            }
+            return found ?? null;
+        } catch (err: any) {
+            this.error.set(err?.message ?? 'No fue posible obtener el equipo');
+            return null;
+        } finally {
+            this.loading.set(false);
+        }
+    }
+    async create(input: MaintenanceDTO) {
+        this.loading.set(true);
+        try {
+            const created = await this.createMaintenance.execute(input);
+            this.items.set([created, ...this.items()]);
+        } finally {
+            this.loading.set(false);
+        }
+    }
+    async update(id: string, patch: Partial<MaintenanceDTO>) {
+        this.loading.set(true);
+        try {
+            const updated = await this.updateMaintenance.execute(id, patch);
+            this.items.set(this.items().map(e => e.id === id ? updated : e));
+        } finally {
+            this.loading.set(false);
+        }
+    }
+    async remove(id: string) {
+        this.loading.set(true);
+        try {
+            await this.removeMaintenance.execute(id);
+            this.items.set(this.items().filter(e => e.id !== id));
+        } finally {
+            this.loading.set(false);
+        }
+    }
 }
+
+
